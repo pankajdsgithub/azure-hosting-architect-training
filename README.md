@@ -1,18 +1,34 @@
-# Azure Hosting Architect Training Repository
+# Azure Hosting Architect Study Material
 
-This repository is a complete training and reference package for Azure hosting architecture work. It is designed for architecture interviews, technical design discussions, and hands-on learning around translating business requirements into an Azure-native solution.
+This repository is built as a senior-level Azure hosting and cloud infrastructure architecture training pack.
 
-## What is included
+## Objective
 
-- Business requirement discovery questions
-- Functional and non-functional requirements
-- Conversion from business needs to technical requirements
-- Landing zone design guidance
-- High-level design (HLD)
-- Low-level design (LLD)
-- Architecture diagrams
-- Interview-style architecture questions
-- Design decision rationale
+The goal is to teach how an enterprise architect should:
+
+- discover business requirements
+- convert them into measurable technical requirements
+- evaluate architecture options
+- select Azure services with rationale
+- document HLD, LLD, decisions, risks, and trade-offs
+- defend the solution in front of stakeholders or interview panels
+
+## Core learning journey
+
+Business Requirement Discovery → Requirement Analysis → Functional and Non-Functional Requirements → Technical Requirement Conversion → Architecture Options → Azure Service Selection → HLD → LLD → Security → HA/DR → Operations → Cost → Architecture Decision Record.
+
+## Main study areas
+
+- Business and application discovery
+- FR and NFR definition
+- Requirement-to-technical conversion
+- Database architecture
+- Messaging and event-driven design
+- Compute / networking / landing zone
+- Security, compliance, and zero trust
+- HA/DR and backup strategy
+- DevOps, IaC, and operations
+- Architecture review and real-world case studies
 
 ## Repository structure
 
@@ -21,56 +37,47 @@ This repository is a complete training and reference package for Azure hosting a
 ├── README.md
 ├── docs/
 │   ├── 00-index.md
-│   ├── 01-business-requirement-discovery.md
-│   ├── 02-functional-and-non-functional-requirements.md
-│   ├── 03-technical-requirements-conversion.md
-│   ├── 04-landing-zone.md
-│   ├── 05-hld.md
-│   ├── 06-lld.md
-│   ├── 07-architecture-diagrams.md
-│   └── 08-interview-questions.md
-└── diagrams/
-    └── README.md
+│   ├── 01-learning-roadmap.md
+│   ├── 02-requirement-discovery-framework.md
+│   ├── 03-phase-0-business-understanding.md
+│   ├── 04-phase-0.5-nfrs.md
+│   ├── 05-phase-1-technical-requirements-conversion.md
+│   ├── 06-phase-2-database-architecture.md
+│   ├── 07-phase-3-messaging-and-integration.md
+│   ├── 08-phase-4-compute-networking-and-landing-zone.md
+│   ├── 09-phase-5-security-and-governance.md
+│   ├── 10-phase-6-ha-dr-operations.md
+│   ├── 11-phase-7-devops-monitoring-and-cicd.md
+│   ├── 12-case-studies.md
+│   └── 13-interview-preparation.md
+├── diagrams/
+│   └── README.md
+└── .gitignore
 ```
 
-## Suggested learning flow
+## How to use this repository
 
-1. Start with business discovery questions.
-2. Convert the business context into FR/NFRs.
-3. Translate those into technical requirements.
-4. Design the landing zone and shared platform foundations.
-5. Build HLD and LLD.
-6. Validate with architecture diagrams and interview questions.
+1. Start from the requirement discovery framework.
+2. Study business context and application discovery before Azure services.
+3. Work through FR and NFR definitions.
+4. Convert each requirement to technical architecture decisions.
+5. Practice using the case studies and interview questions.
+6. Build your own architecture explanations in simple Hinglish + professional English.
 
-## Typical architecture scenario
+## Key themes
 
-This repo is aligned to a common enterprise scenario:
+- Azure-first architecture, with AWS or other platforms referenced only for comparison.
+- Business-first design, not service-first design.
+- Quantified NFRs, measurable SLAs, and realistic trade-offs.
+- Architecture decisions must be explainable, defendable, and supportable.
 
-- multi-tier application platform
-- secure internet-facing and internal workloads
-- Azure-native landing zone
-- ingress through APIM / Application Gateway / Front Door
-- backend APIs and data services
-- telemetry, observability, governance, and security controls
-
-## Core design themes
-
-- Security by default
-- Least privilege access
-- Scalability and resilience
-- High availability and disaster recovery
-- egress and networking control
-- Platform operations readiness
-- Cost awareness and governance
-- Compliance and auditability
-
-## Useful references
+## References
 
 - Azure Well-Architected Framework
-- Azure landing zone design guidance
-- Azure enterprise-scale reference architecture
-- Microsoft Cloud Adoption Framework
+- Azure Landing Zone guidance
+- Cloud Adoption Framework
+- Microsoft Learn Azure services documentation
 
 ---
 
-This repository is intended to help practice and present architecture thinking in a structured, business-aware way.
+This material is meant to help you think like an enterprise Azure hosting architect, not just memorize cloud terms.
