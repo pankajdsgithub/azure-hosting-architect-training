@@ -17,6 +17,15 @@ This is the complete study path for enterprise Azure hosting architecture prepar
 11. [11-phase-7-devops-monitoring-and-cicd.md](11-phase-7-devops-monitoring-and-cicd.md) – automation, pipelines, IaC, observability
 12. [12-case-studies.md](12-case-studies.md) – enterprise scenarios and end-to-end designs
 13. [13-interview-preparation.md](13-interview-preparation.md) – architect-level interview prep and answer framing
+14. [14-hld-lld-template-pack.md](14-hld-lld-template-pack.md) – client-ready HLD and LLD templates
+
+## Template pack
+
+For a direct Word-style design document package, use the files in the templates folder:
+
+- [templates/hld-template.md](../templates/hld-template.md)
+- [templates/lld-template.md](../templates/lld-template.md)
+- [templates/adr-template.md](../templates/adr-template.md)
 
 ## Learning objective
 

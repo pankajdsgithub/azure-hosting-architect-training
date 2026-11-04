@@ -49,9 +49,16 @@ Business Requirement Discovery → Requirement Analysis → Functional and Non-F
 │   ├── 10-phase-6-ha-dr-operations.md
 │   ├── 11-phase-7-devops-monitoring-and-cicd.md
 │   ├── 12-case-studies.md
-│   └── 13-interview-preparation.md
+│   ├── 13-interview-preparation.md
+│   └── 14-hld-lld-template-pack.md
+├── templates/
+│   ├── README.md
+│   ├── hld-template.md
+│   ├── lld-template.md
+│   └── adr-template.md
 ├── diagrams/
 │   └── README.md
+├── .gitignore
 └── .gitignore
 ```
 
