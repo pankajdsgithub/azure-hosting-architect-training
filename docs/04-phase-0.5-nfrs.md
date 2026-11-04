@@ -403,14 +403,78 @@ Mean Time To Acknowledge
 | DR | How fast must recovery happen? | 1 hour | RTO 1 hour |
 | Security | What security is required? | MFA and private connectivity | Entra ID + private endpoints |
 
-## 9. Common Mistakes
+## 9. Sample Business Requirement to HLD and LLD Decision Table
+
+This section helps convert vague business phrasing into practical architecture choices that appear in both HLD and LLD.
+
+### 9.1 HLD and LLD scenario examples
+
+| Scenario | Business requirement | HLD design choice | LLD design choice | Architecture rationale |
+|---|---|---|---|---|
+| Retail e-commerce | Customer should place orders even during festive spikes, without slow checkout | Use API-driven architecture with Front Door, WAF, app tier, and message-based order processing | Deploy stateless app services, autoscaling, Redis caching, queue-based order workers, database read replicas | Prevent checkout failures under traffic bursts and decouple slow downstream steps |
+| Banking / payments | Transaction must be secure, auditable, and highly available | Prefer private network segmentation, strong identity controls, and dual-region failover | Use private endpoints, managed identity, Key Vault, WAF, RBAC, encrypted storage, transaction logs, and active-passive DR | Security and compliance are higher priority than raw feature speed |
+| Internal HR portal | HR dashboard must be available during working hours but does not need 24x7 demand | Use a single region with autoscaling and scheduled maintenance window | Provide app services, SQL DB, standard backups, alerts, and role-based access | Keep the design simple and cost effective while meeting business hours SLA |
+| Logistics tracking | Real-time shipment updates are expected, but minor delay is tolerable | Use event-driven integration with API ingestion and asynchronous processing | Event Hubs or Service Bus for telemetry, stream processing, notifications, and DLQ | Real-time visibility is important, but the system does not need synchronous blocking at every step |
+| Healthcare / patient portal | Data privacy and access control are paramount | Use zero-trust, private access, regional hosting, and strict segregation of workloads | Enforce MFA, conditional access, encryption keys in Key Vault, audit logging, and limited public access | Risk exposure from data leakage is more critical than user convenience |
+| Public government portal | System must support peak traffic during new service launches | Use CDN + Front Door + load-balanced app services + autoscaling | Cache static pages, use asynchronous jobs for heavy operations, deploy with blue-green releases | Public-facing services need scale and resilience during spikes without downtime |
+| Ticketing platform | Users expect quick search and order updates but not full real-time consistency | Use read-optimized front end with CQRS-style patterns where needed | Cache high-frequency queries, use separate write and read models, asynchronous notifications | Improves speed while preserving acceptable eventual consistency |
+| IoT / telemetry analytics | Millions of sensor messages must be processed with minimal loss | Use event ingestion, partitioning, and streaming architecture | Event Hubs for ingestion, stream analytics or Kafka consumers, long-term storage, and alerting | Handles high throughput and allows replay or backfill |
+
+### 9.2 Decision matrix for HLD-level requirements
+
+| Business statement | Typical interpretation | HLD architectural answer | Typical Azure services |
+|---|---|---|---|
+| “We need it to be fast” | Need latency target and concurrency model | Use CDN, caching, scale-out, and performance benchmarking | Front Door, Azure CDN, Redis, AKS, App Service |
+| “It must always be available” | Need uptime target and failure domain protection | Use active-active or active-passive deployment, load balancing, and DR design | Azure Front Door, Traffic Manager, Availability Zones, Load Balancer |
+| “It should be secure by default” | Need identity, segmentation, and encryption | Use zero-trust model with private networking and managed identity | Entra ID, Key Vault, NSGs, WAF, Private Link |
+| “We need to handle growth” | Need elasticity and burst support | Use autoscaling and asynchronous processing | AKS autoscaler, Container Apps, Service Bus, Event Hubs |
+| “We need to reduce cost” | Need right-sizing and platform-managed services | Prefer PaaS over IaaS where possible; use autoscaling and standard SKUs | App Service, Azure SQL, Container Apps, Azure Monitor |
+| “We need compliance” | Need region, retention, and audit controls | Design for residency, secure logging, and policy enforcement | Azure Policy, Defender, Log Analytics, Key Vault |
+
+### 9.3 Decision matrix for LLD-level requirements
+
+| Requirement detail | LLD design question | Typical implementation | Why it matters |
+|---|---|---|---|
+| API latency under 500 ms | How is caching and query optimization implemented? | Redis cache, pagination, DB indexing, async jobs | Keeps user-facing responses within SLA |
+| 99.95% availability | What health checks and failover controls exist? | Liveness probes, readiness probes, deployment strategies, regional failover plan | Provides resilience during app or platform faults |
+| No public DB access | How do components communicate securely? | Private endpoints, VNet integration, firewall rules, managed identity | Reduces attack surface and meets security best practice |
+| High traffic during peak window | What auto-scaling rules are configured? | Horizontal pod scaling, CPU/memory thresholds, queue-based workers | Keeps service stable without oversizing always-on resources |
+| Message durability required | What retry and DLQ logic is implemented? | Service Bus topics, dead-letter queues, idempotent consumers | Prevents data loss and supports recovery from transient failures |
+| Business users require audit trails | What logging and trace model is implemented? | Azure Monitor, App Insights, diagnostic settings, centralized log retention | Supports governance, security review, and troubleshooting |
+| Disaster recovery within 1 hour | How is backup and restore tested? | Geo-replication, backup schedule, restore runbook, failover drills | Ensures the business can recover within stated RTO |
+
+### 9.4 Sample HLD-to-LLD traceability table
+
+| Business objective | HLD statement | LLD implementation detail | Evidence of traceability |
+|---|---|---|---|
+| Provide secure customer access | Use identity-first access and WAF at edge | Entra ID + App Gateway + WAF + RBAC | Security requirements trace to access control design |
+| Support seasonal traffic spikes | Scale horizontally and decouple order processing | AKS autoscaling + Service Bus queue + worker pods | Scalability requirement mapped to queue-based worker pattern |
+| Meet customer SLAs | Keep app responsive and available | Redis cache, DB indexing, health probes, active-passive failover | Performance and availability targets map to runtime implementation |
+| Preserve data integrity | Use transactional database and backup strategy | Azure SQL with failover group, backup retention, restore tested | Data protection requirement maps to database DR design |
+| Support cross-system integration | Use event-driven communication | Service Bus topics, API gateway, integration layer | Interoperability requirement mapped to integration design |
+
+### 9.5 Practical architect interview framing
+
+When an interviewer asks, “What design choice would you make for this requirement?”, the correct answer should be structured like this:
+
+1. Business need
+2. Requirement quantification
+3. HLD decision
+4. LLD design detail
+5. Trade-off and risk
+
+Example:
+
+> The business requires 99.95% availability for a customer-facing portal during peak shopping periods. At HLD level, we would choose a regional active-passive architecture with a global entry point, autoscaling, and traffic management. At LLD level, we would implement Azure Front Door, WAF, application load balancing, autoscaled container services, database failover, and health-based routing. The trade-off is higher cost and operational complexity, but it is justified by the business impact of downtime and the required SLA.
+
+## 10. Common Mistakes
 
 - NFRs written without measurable thresholds
 - saying “high availability” without specifying uptime target
 - not linking NFR to business impact
 - selecting services before defining performance and resilience target
 
-## 10. Interview Questions
+## 11. Interview Questions
 
 ### Basic
 
@@ -430,14 +494,14 @@ Mean Time To Acknowledge
 - How do you quantify cost against availability in architecture reviews?
 - How do you decide which NFR is non-negotiable versus negotiable?
 
-## 11. Quick Revision
+## 12. Quick Revision
 
 - FR = what system does.
 - NFR = how system performs.
 - Good NFRs are measurable and tied to business risk.
 - SLA, SLO, RTO, RPO are not theoretical—they drive architecture.
 
-## 12. Knowledge Checkpoint
+## 13. Knowledge Checkpoint
 
 - What are three common NFR mistakes in solution design?
 - Which NFRs usually drive database choice?
