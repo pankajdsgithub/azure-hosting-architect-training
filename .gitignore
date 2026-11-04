@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor temp files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local env
+.env
+.env.*
+
+# Git
+*.orig
